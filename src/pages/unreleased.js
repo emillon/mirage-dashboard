@@ -1,56 +1,7 @@
 import React from "react"
 import { graphql } from "gatsby"
 import Container from "../components/container"
-
-function Release({ url, name }) {
-  return url ? <a href={url}>{name}</a> : name
-}
-
-class RepoLine extends React.Component {
-  lastRelease() {
-    const releases = this.props.repo.releases.nodes
-    if (releases.length > 0) {
-      const release = releases[0]
-      const tag = release.tag
-      const url = release.url
-      const oid =
-        "target" in tag.target ? tag.target.target.oid : tag.target.oid
-      return <Release oid={oid} name={tag.name} url={url} />
-    } else {
-      return <Release name="no release" />
-    }
-  }
-
-  outstanding() {
-    const defaultBranchRef = this.props.repo.defaultBranchRef
-    const lastOid = defaultBranchRef.target.oid
-    const release = this.lastRelease()
-    const releaseOid = release.props.oid
-    if (lastOid === releaseOid) {
-      return "-"
-    } else if (!release.props.oid) {
-      return "-"
-    } else {
-      const url =
-        this.props.repo.url +
-        "/compare/" +
-        release.props.name +
-        "..." +
-        defaultBranchRef.name
-      return <a href={url}>compare</a>
-    }
-  }
-
-  render() {
-    return (
-      <tr key={this.props.repo.id}>
-        <td>{this.props.repo.name}</td>
-        <td>{this.lastRelease()}</td>
-        <td>{this.outstanding()}</td>
-      </tr>
-    )
-  }
-}
+import RepoLine from "../components/Unreleased.bs"
 
 class UnreleasedPage extends React.Component {
   repos() {
